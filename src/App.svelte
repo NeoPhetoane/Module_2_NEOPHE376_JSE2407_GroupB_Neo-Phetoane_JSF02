@@ -2,6 +2,7 @@
 <script>
 import Header from './components/Header.svelte'
 import ProductList from './components/ProductList.svelte'
+import ProductDetail from './components/ProductDetail.svelte'
 </script>
 
 
@@ -9,6 +10,7 @@ import ProductList from './components/ProductList.svelte'
 <main>
 <Header/>
 <ProductList/>
+<ProductDetail/>
 </main>
 
 
