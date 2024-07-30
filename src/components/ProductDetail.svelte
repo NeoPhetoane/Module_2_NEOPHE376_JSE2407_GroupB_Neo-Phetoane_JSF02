@@ -28,17 +28,40 @@
 </script>
 
 {#if loading}
-  <p>Loading...</p>
+  <div class="flex items-center justify-center h-screen">
+    <div class="text-lg text-gray-500">Loading...</div>
+  </div>
 {:else if error}
-  <p>Error: {error}</p>
+  <div class="flex items-center justify-center h-screen">
+    <div class="text-lg text-red-600">Error: {error}</div>
+  </div>
 {:else}
-  <div class="product-detail">
-    <button on:click={goBack}>Back to Products</button>
-    <h1>{product.title}</h1>
-    <img src={product.image} alt={product.title} />
-    <p>{product.description}</p>
-    <p>Price: ${product.price}</p>
-    <p>Category: {product.category}</p>
-    <p>Rating: {product.rating.rate} ({product.rating.count} reviews)</p>
+  <div class="container mx-auto p-6 bg-white shadow-lg rounded-lg max-w-4xl">
+    <button 
+      class="mb-4 px-4 py-2 bg-blue-500 text-white font-semibold rounded-md shadow hover:bg-blue-600 transition duration-200"
+      on:click={goBack}
+    >
+      Back to Products
+    </button>
+    <div class="flex flex-col md:flex-row gap-6">
+      <img 
+        class="w-full md:w-1/3 h-auto object-cover rounded-lg shadow-md"
+        src={product.image} 
+        alt={product.title} 
+      />
+      <div class="flex-1">
+        <h1 class="text-3xl font-bold text-gray-800 mb-2">{product.title}</h1>
+        <p class="text-gray-600 mb-4">{product.description}</p>
+        <p class="text-xl font-semibold text-blue-600 mb-2">Price: ${product.price}</p>
+        <p class="text-gray-700 mb-2">Category: {product.category}</p>
+        <p class="text-gray-600">Rating: {product.rating.rate} ({product.rating.count} reviews)</p>
+      </div>
+    </div>
   </div>
 {/if}
+
+<style>
+  .container {
+    max-width: 1200px;
+  }
+</style>
