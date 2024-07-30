@@ -1,5 +1,20 @@
 <script>
+  export let categories = [];
+  export let onFilterChange;
+  export let onSortChange;
 
+  let selectedCategory = '';
+  let sortOrder = 'default';
+
+  function handleCategoryChange(event) {
+    selectedCategory = event.target.value;
+    onFilterChange(selectedCategory);
+  }
+
+  function handleSortChange(event) {
+    sortOrder = event.target.value;
+    onSortChange(sortOrder);
+  }
 </script>
 
 <div class="flex flex-col space-y-4 p-4 bg-white border border-gray-200 rounded-lg shadow-md">
