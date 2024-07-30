@@ -5,10 +5,11 @@ import { Link } from 'svelte-routing';
  
 </script>
 
-
+<Link  to={`/product/${product.id}`}>
 <div
   class="flex flex-col max-h-[130rem] cursor-pointer max-w-80 hover:-translate-y-1 hover:scale-105 duration-300 bg-white border border-slate-200 shadow shadow-slate-950/5 rounded-2xl overflow-hidden"
 >
+
   <!-- Product Image -->
   <img class="object-contain h-48 mt-3" src={product.image} alt="Product Image" />
   
@@ -59,3 +60,4 @@ import { Link } from 'svelte-routing';
     </div>
   </div>
 </div>
+</Link>

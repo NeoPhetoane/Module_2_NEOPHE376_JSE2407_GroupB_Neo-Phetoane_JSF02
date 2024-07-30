@@ -4,7 +4,6 @@
 import { Router, Route, Link } from 'svelte-routing';
 import Header from './components/Header.svelte';
 import ProductList from './components/ProductList.svelte';
-import FilterSort from './components/FilterSort.svelte';
 import ProductDetail from './components/ProductDetail.svelte';
 </script>
 

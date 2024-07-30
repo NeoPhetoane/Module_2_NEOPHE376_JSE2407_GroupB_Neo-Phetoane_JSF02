@@ -1,29 +1,44 @@
 <script>
   import { onMount } from 'svelte';
-  import { params} from 'svelte-spa-router';
-  import {Link } from 'svelte-routing';
+  import { navigate } from 'svelte-routing';
 
-  let product = {};
-  let { id } = params();
+  export let id;
+
+  let product = null;
+  let loading = true;
+  let error = null;
 
   onMount(async () => {
-    const response = await fetch(`https://fakestoreapi.com/products/${productId}`);
-    product = await response.json();
+    try {
+      const response = await fetch(`https://fakestoreapi.com/products/${id}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch product details');
+      }
+      product = await response.json();
+    } catch (err) {
+      error = err.message;
+    } finally {
+      loading = false;
+    }
   });
+
+  function goBack() {
+    navigate('/');
+  }
 </script>
-<main>
-{#if $product}
-<div class="p-4">
-  <h1 class="text-3xl font-bold">{product.title}</h1>
-  <img src={product.image} alt={product.title} class="w-full" />
-  <p>{product.description}</p>
-  <p>${product.price}</p>
-  <p>{product.category}</p>
-  <p>Rating: {product.rating ? product.rating.rate : 'N/A'}</p>
-  <p>Reviews: {product.rating ? product.rating.count : 'N/A'}</p>
-</div>
+
+{#if loading}
+  <p>Loading...</p>
+{:else if error}
+  <p>Error: {error}</p>
 {:else}
-<p>Loading...</p>
+  <div class="product-detail">
+    <button on:click={goBack}>Back to Products</button>
+    <h1>{product.title}</h1>
+    <img src={product.image} alt={product.title} />
+    <p>{product.description}</p>
+    <p>Price: ${product.price}</p>
+    <p>Category: {product.category}</p>
+    <p>Rating: {product.rating.rate} ({product.rating.count} reviews)</p>
+  </div>
 {/if}
-<Link to="/"> Back</Link>
-</main>

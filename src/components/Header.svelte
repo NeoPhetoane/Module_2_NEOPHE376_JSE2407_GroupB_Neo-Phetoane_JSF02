@@ -8,9 +8,11 @@
 
 <header class="header">
   <div class="container">
+  <a href="/">
     <div class="brand">
     <img src="/online-shop.png" alt="Flowbite Logo" />SwiftCart
     </div>
+  </a>
     <nav class="nav-links">
      <a href="/">Login</a>
       <a href="/">Cart</a>
