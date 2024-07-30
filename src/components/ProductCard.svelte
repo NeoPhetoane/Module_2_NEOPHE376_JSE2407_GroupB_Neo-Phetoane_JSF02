@@ -44,7 +44,7 @@
   async function loadProducts() {
     try {
       loading = true;
-      const response = await fetch(`https://fakestoreapi.com/products`);
+      const response = await fetch(https://fakestoreapi.com/products);
       let allProducts = await response.json();
 
       // Filter products by selected category
