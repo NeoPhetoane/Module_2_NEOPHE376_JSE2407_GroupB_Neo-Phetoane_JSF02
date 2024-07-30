@@ -1,118 +1,61 @@
 <script>
-  import ProductCard from './ProductCard.svelte';
-  import FilterSort from './FilterSort.svelte';
-  import { onMount } from 'svelte';
-  
-  let products = [];
-  let categories = [];
-  let selectedCategory = "";
-  let sortOrder = "default";
-  let loading = true;
-  let error = null;
+import { Link } from 'svelte-routing';
 
-  async function fetchProducts() {
-    try {
-      loading = true;
-      const response = await fetch("https://fakestoreapi.com/products");
-      products = await response.json();
-    } catch (err) {
-      error = err;
-    } finally {
-      loading = false;
-    }
-  }
-
-  async function fetchCategories() {
-    try {
-      const response = await fetch("https://fakestoreapi.com/products/categories");
-      categories = await response.json();
-    } catch (err) {
-      error = err;
-    }
-  }
-
-  function handleFilterChange(category) {
-    selectedCategory = category;
-    loadProducts();
-  }
-
-  function handleSortChange(order) {
-    sortOrder = order;
-    loadProducts();
-  }
-
-  async function loadProducts() {
-    try {
-      loading = true;
-      const response = await fetch(`https://fakestoreapi.com/products`);
-      let allProducts = await response.json();
-
-      // Filter products by selected category
-      if (selectedCategory) {
-        allProducts = allProducts.filter(product => product.category === selectedCategory);
-      }
-
-      // Sort products by price
-      if (sortOrder === 'asc') {
-        allProducts.sort((a, b) => a.price - b.price);
-      } else if (sortOrder === 'desc') {
-        allProducts.sort((a, b) => b.price - a.price);
-      }
-
-      products = allProducts;
-    } catch (err) {
-      error = err;
-    } finally {
-      loading = false;
-    }
-  }
-
-  onMount(() => {
-    fetchCategories();
-    loadProducts();
-  });
-  
+  export let product;
+ 
 </script>
 
-<FilterSort {categories} onFilterChange={handleFilterChange} onSortChange={handleSortChange} />
 
-<!-- Loading State -->
-{#if loading && !error}
-  <div class="grid justify-center">
-    <div class="lg:max-h-[130rem] max-w-xl mx-auto grid gap-4 grid-cols-1 lg:grid-cols-4 md:grid-cols-2 items-center lg:max-w-none my-4">
-      {#each Array(20) as _, index}
-        <div class="bg-white max-w-sm p-4 border border-gray-200 rounded shadow animate-pulse md:p-6 dark:border-gray-700" key={index}>
-          <div class="flex items-center justify-center h-48 mb-4 bg-gray-300 rounded dark:bg-gray-700">
-            <svg class="w-10 h-10 text-gray-200 dark:text-gray-600" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 20">
-              <path d="M14.066 0H7v5a2 2 0 0 1-2 2H0v11a1.97 1.97 0 0 0 1.934 2h12.132A1.97 1.97 0 0 0 16 18V2a1.97 1.97 0 0 0-1.934-2ZM10.5 6a1.5 1.5 0 1 1 0 2.999A1.5 1.5 0 0 1 10.5 6Zm2.221 10.515a1 1 0 0 1-.858.485h-8a1 1 0 0 1-.9-1.43L5.6 10.039a.978.978 0 0 1 .936-.57 1 1 0 0 1 .9.632l1.181 2.981.541-1a.945.945 0 0 1 .883-.522 1 1 0 0 1 .879.529l1.832 3.438a1 1 0 0 1-.031.988Z"/>
-              <path d="M5 5V.13a2.96 2.96 0 0 0-1.293.749L.879 3.707A2.98 2.98 0 0 0 .13 5H5Z"/>
-            </svg>
-          </div>
-          <div class="h-2 bg-gray-200 rounded-full dark:bg-gray-700 mb-2.5"></div>
-          <div class="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"></div>
-          <div class="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-10 mb-4"></div>
-          <span class="sr-only">Loading...</span>
-        </div>
-      {/each}
+<div
+  class="flex flex-col max-h-[130rem] cursor-pointer max-w-80 hover:-translate-y-1 hover:scale-105 duration-300 bg-white border border-slate-200 shadow shadow-slate-950/5 rounded-2xl overflow-hidden"
+>
+  <!-- Product Image -->
+  <img class="object-contain h-48 mt-3" src={product.image} alt="Product Image" />
+  
+  <!-- Product Details -->
+  <div class="flex-1 flex flex-col p-6">
+    <!-- Product Title -->
+    <header class="mb-2 flex-2">
+      <h2 class="text-lg line-clamp-2 font-extrabold leading-snug text-slate-600">
+        {product.title}
+      </h2>
+    </header>
+
+    <!-- Product Rating and Reviews -->
+    <div class="flex gap-2">
+      {#if product.rating}
+        <svg class="inline-block h-5 w-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+          <path d="M10 15l-3.092 1.623 0.591-3.443-2.52-2.453 3.461-0.502 1.56-3.15 1.56 3.15 3.461 0.502-2.52 2.453 0.591 3.443L10 15z" />
+        </svg>
+      {/if}
+      <div>{product.rating ? product.rating.rate : 'No Rating'}</div>
+      <div>Reviews: <span>{product.rating ? product.rating.count : 'N/A'}</span></div>
+    </div>
+
+    <!-- Product Price -->
+    <div class="text-base line-clamp-2 font-extrabold text-slate-500 leading-snug mt-2">
+      <h2>${product.price}</h2>
+    </div>
+
+    <!-- Product Category -->
+    <div class="flex mt-1 space-x-2">
+      <div class="justify-start flex-1">
+        <span class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
+          <span>{product.category}</span>
+        </span>
+      </div>
+      <div class="justify-end space-x-2">
+        <!-- Add to Favourites Button -->
+        <button on:click|stopPropagation={() => console.log('Add to Favourites')}>
+          <svg class="me-1.5 h-5 w-5 hover:fill-red-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" transform="scale(1.6)">
+            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12.01 6.001C6.5 1 1 8 5.782 13.001L12.011 20l6.23-7C23 8 17.5 1 12.01 6.002Z" />
+          </svg>
+        </button>
+        <!-- Add to Cart Button -->
+        <button class="bg-gray-200 hover:bg-gray-300 px-2 py-1 rounded-lg">
+         <p>Add to cart</p>
+        </button>
+      </div>
     </div>
   </div>
-{/if}
-
-<!-- Error State -->
-{#if error}
-  <div class="grid justify-center">
-    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-      <strong class="font-bold">Error:</strong>
-      <span class="block sm:inline">{error.message}</span>
-    </div>
-  </div>
-{/if}
-
-<!-- Product Cards -->
-{#if !loading && !error}
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-    {#each products as product}
-      <ProductCard {product} onClick={id => console.log(id)} />
-    {/each}
-  </div>
-{/if}
+</div>

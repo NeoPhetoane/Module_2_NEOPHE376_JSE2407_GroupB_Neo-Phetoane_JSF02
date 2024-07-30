@@ -44,7 +44,7 @@
   async function loadProducts() {
     try {
       loading = true;
-      const response = await fetch(`https://fakestoreapi.com/products`);
+      const response = await fetch("https://fakestoreapi.com/products");
       let allProducts = await response.json();
 
       // Filter products by selected category
@@ -112,7 +112,7 @@
 {#if !loading && !error}
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
     {#each products as product}
-      <ProductCard {product} onClick={id => console.log(id)} />
+      <ProductCard {product} />
     {/each}
   </div>
 {/if}
