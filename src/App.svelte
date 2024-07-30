@@ -1,8 +1,8 @@
 <!--Script section-->
 <script>
 import Header from './components/Header.svelte'
+import FilterSort from './components/FilterSort.svelte';
 import ProductList from './components/ProductList.svelte'
-import ProductDetail from './components/ProductDetail.svelte'
 </script>
 
 
