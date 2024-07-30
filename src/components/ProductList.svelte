@@ -3,6 +3,7 @@
   import FilterSort from './FilterSort.svelte';
   import { onMount } from 'svelte';
   
+  
   let products = [];
   let categories = [];
   let selectedCategory = "";
